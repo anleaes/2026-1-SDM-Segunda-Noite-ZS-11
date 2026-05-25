@@ -1,0 +1,26 @@
+### Pessoas
+GET http://localhost:8000/pessoas/
+
+### Clientes
+GET http://localhost:8000/clientes/
+
+### Funcionarios
+GET http://localhost:8000/funcionarios/
+
+### Contratos
+GET http://localhost:8000/contratos/
+
+### Itens de contrato
+GET http://localhost:8000/itens-contrato/
+
+### Pagamentos
+GET http://localhost:8000/pagamentos/
+
+### Documentos
+GET http://localhost:8000/documentos/
+
+### Notificacoes
+GET http://localhost:8000/notificacoes/
+
+### Auditorias
+GET http://localhost:8000/auditorias/

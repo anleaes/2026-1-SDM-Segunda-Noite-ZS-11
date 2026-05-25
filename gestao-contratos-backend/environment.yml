@@ -1,0 +1,13 @@
+name: gestao-contratos
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - Django==5.2.1
+      - djangorestframework==3.16.0
+      - django-filter==25.1
+      - python-decouple==3.8
+      - oracledb==3.1.1
