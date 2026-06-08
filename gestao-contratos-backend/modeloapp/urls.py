@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.authtoken.views import obtain_auth_token
+from useraccounts.auth import AuthStatusView, LogoutView, UserAccountAuthToken
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -17,5 +17,7 @@ urlpatterns = [
     path('documentos/', include('documents.urls', namespace='documents')),
     path('notificacoes/', include('notifications.urls', namespace='notifications')),
     path('auditorias/', include('audits.urls', namespace='audits')),
-    path('token-autenticacao/', obtain_auth_token),
+    path('token-autenticacao/', UserAccountAuthToken.as_view()),
+    path('auth/status/', AuthStatusView.as_view()),
+    path('auth/logout/', LogoutView.as_view()),
 ]
