@@ -1,7 +1,8 @@
-from rest_framework import viewsets
+﻿from rest_framework import viewsets
 from .models import Employee
 from .serializer import EmployeeSerializer
 
 class EmployeeViewSet(viewsets.ModelViewSet):
+    """Endpoint REST para operacoes de employees."""
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
