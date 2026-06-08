@@ -1,13 +1,14 @@
-from django.db import models
+﻿from django.db import models
 from useraccounts.models import UserAccount
 from contracts.models import Contract
 
 class Audit(models.Model):
-    action = models.CharField('Ação', max_length=100)
-    description = models.TextField('Descrição', max_length=500)
-    action_date = models.DateField('Data da ação')
-    ip_address = models.CharField('Endereço IP', max_length=50)
-    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='audits', verbose_name='Usuário')
+    """Mantem os dados de audits alinhados ao dominio de contratos."""
+    action = models.CharField('AÃ§Ã£o', max_length=100)
+    description = models.TextField('DescriÃ§Ã£o', max_length=500)
+    action_date = models.DateField('Data da aÃ§Ã£o')
+    ip_address = models.CharField('EndereÃ§o IP', max_length=50)
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='audits', verbose_name='UsuÃ¡rio')
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='audits', verbose_name='Contrato')
 
     class Meta:
