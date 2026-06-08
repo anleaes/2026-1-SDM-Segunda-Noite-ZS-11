@@ -15,4 +15,5 @@ class Person(models.Model):
         ordering = ['id']
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.first_name} {self.last_name}'
