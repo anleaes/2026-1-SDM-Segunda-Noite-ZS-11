@@ -1,11 +1,14 @@
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from rest_framework import serializers, status
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .authentication import AUTH_COOKIE_MAX_AGE, AUTH_COOKIE_NAME, AUTH_COOKIE_SAMESITE
 from .models import UserAccount
 
 
@@ -19,6 +22,26 @@ def password_matches(raw_password, stored_password):
         return False
 
     return check_password(raw_password, stored_password) or raw_password == stored_password
+
+
+def set_auth_cookie(response, token):
+    response.set_cookie(
+        AUTH_COOKIE_NAME,
+        token.key,
+        max_age=AUTH_COOKIE_MAX_AGE,
+        httponly=True,
+        secure=not settings.DEBUG,
+        samesite=AUTH_COOKIE_SAMESITE,
+        path='/',
+    )
+
+
+def clear_auth_cookie(response):
+    response.delete_cookie(
+        AUTH_COOKIE_NAME,
+        samesite=AUTH_COOKIE_SAMESITE,
+        path='/',
+    )
 
 
 class UserAccountAuthToken(APIView):
@@ -35,7 +58,9 @@ class UserAccountAuthToken(APIView):
         django_user = authenticate(request, username=username, password=password)
         if django_user:
             token, _ = Token.objects.get_or_create(user=django_user)
-            return Response({'token': token.key})
+            response = Response({'detail': 'Login realizado com sucesso.'})
+            set_auth_cookie(response, token)
+            return response
 
         try:
             account = UserAccount.objects.get(username=username, is_active=True)
@@ -66,4 +91,25 @@ class UserAccountAuthToken(APIView):
             user.save(update_fields=['is_active'])
 
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        response = Response({'detail': 'Login realizado com sucesso.'})
+        set_auth_cookie(response, token)
+        return response
+
+
+class AuthStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return Response({
+            'authenticated': True,
+            'username': request.user.username,
+        })
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        response = Response({'detail': 'Logout realizado com sucesso.'})
+        clear_auth_cookie(response)
+        return response
