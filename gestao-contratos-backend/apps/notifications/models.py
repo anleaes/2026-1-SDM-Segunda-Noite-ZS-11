@@ -29,4 +29,5 @@ class Notification(models.Model):
         return self.is_read
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.title}'
