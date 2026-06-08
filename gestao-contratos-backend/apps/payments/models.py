@@ -38,4 +38,5 @@ class Payment(models.Model):
         return self.status
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'Parcela {self.installment_number} - {self.contract.number}'
