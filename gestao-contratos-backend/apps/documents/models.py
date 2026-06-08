@@ -1,7 +1,8 @@
-from django.db import models
+﻿from django.db import models
 from contracts.models import Contract
 
 class Document(models.Model):
+    """Mantem os dados de documents alinhados ao dominio de contratos."""
     file_name = models.CharField('Nome do arquivo', max_length=150)
     file_type = models.CharField('Tipo do arquivo', max_length=50)
     file_path = models.CharField('Caminho do arquivo', max_length=250)
