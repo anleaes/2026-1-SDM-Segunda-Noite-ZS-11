@@ -4,6 +4,8 @@ from .models import Contract
 
 class ContractSerializer(serializers.ModelSerializer):
     """Serializa os dados de contracts para a API."""
+    start_date = serializers.DateField(input_formats=['%Y-%m-%d', '%d/%m/%Y'])
+    end_date = serializers.DateField(input_formats=['%Y-%m-%d', '%d/%m/%Y'])
     start_date_formatted = serializers.SerializerMethodField()
     end_date_formatted = serializers.SerializerMethodField()
     total_value_formatted = serializers.SerializerMethodField()
