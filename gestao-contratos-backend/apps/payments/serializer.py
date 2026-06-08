@@ -4,5 +4,6 @@ from .models import Payment
 class PaymentSerializer(serializers.ModelSerializer):
     """Serializa os dados de payments para a API."""
     class Meta:
+        """Configuracao principal do serializer de payments."""
         model = Payment
         fields = '__all__'
