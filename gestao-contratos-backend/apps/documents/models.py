@@ -22,4 +22,5 @@ class Document(models.Model):
         return self.is_signed
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.file_name}'
