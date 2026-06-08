@@ -1,7 +1,8 @@
-from django.db import models
+﻿from django.db import models
 from contracts.models import Contract
 
 class Payment(models.Model):
+    """Mantem os dados de payments alinhados ao dominio de contratos."""
     STATUS_CHOICES = [
         ('PENDENTE', 'Pendente'),
         ('PAGO', 'Pago'),
@@ -11,12 +12,12 @@ class Payment(models.Model):
     PAYMENT_METHOD_CHOICES = [
         ('PIX', 'Pix'),
         ('BOLETO', 'Boleto'),
-        ('CARTAO', 'Cartão'),
-        ('TRANSFERENCIA', 'Transferência'),
+        ('CARTAO', 'CartÃ£o'),
+        ('TRANSFERENCIA', 'TransferÃªncia'),
         ('DINHEIRO', 'Dinheiro'),
     ]
 
-    installment_number = models.IntegerField('Número da parcela', default=1)
+    installment_number = models.IntegerField('NÃºmero da parcela', default=1)
     due_date = models.DateField('Data de vencimento')
     payment_date = models.DateField('Data de pagamento', null=True, blank=True)
     value = models.DecimalField('Valor', max_digits=10, decimal_places=2, default=0)
