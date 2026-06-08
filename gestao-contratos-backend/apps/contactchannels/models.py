@@ -1,6 +1,7 @@
-from django.db import models
+﻿from django.db import models
 
 class ContactChannel(models.Model):
+    """Mantem os dados de contactchannels alinhados ao dominio de contratos."""
     CHANNEL_CHOICES = [
         ('EMAIL', 'Email'),
         ('TELEFONE', 'Telefone'),
@@ -9,7 +10,7 @@ class ContactChannel(models.Model):
     ]
 
     name = models.CharField('Nome', max_length=100)
-    description = models.TextField('Descrição', max_length=250)
+    description = models.TextField('DescriÃ§Ã£o', max_length=250)
     channel_type = models.CharField('Tipo de canal', max_length=20, choices=CHANNEL_CHOICES)
     is_active = models.BooleanField('Ativo', default=True)
 
@@ -20,4 +21,5 @@ class ContactChannel(models.Model):
         ordering = ['id']
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.name} - {self.channel_type}'
