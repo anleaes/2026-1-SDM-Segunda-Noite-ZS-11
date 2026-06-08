@@ -22,4 +22,5 @@ class UserAccount(models.Model):
         ordering = ['id']
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.username} - {self.profile}'
