@@ -36,4 +36,5 @@ class Contract(models.Model):
         return self.status
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.number} - {self.title}'
