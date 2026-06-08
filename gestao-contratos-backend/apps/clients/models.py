@@ -22,4 +22,5 @@ class Client(Person):
         ordering = ['id']
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.company_name} - {self.cpf_cnpj}'
