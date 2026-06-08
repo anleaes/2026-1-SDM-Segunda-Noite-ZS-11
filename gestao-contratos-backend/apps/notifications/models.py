@@ -1,7 +1,8 @@
-from django.db import models
+﻿from django.db import models
 from contracts.models import Contract
 
 class Notification(models.Model):
+    """Mantem os dados de notifications alinhados ao dominio de contratos."""
     TYPE_CHOICES = [
         ('VENCIMENTO', 'Vencimento'),
         ('PAGAMENTO', 'Pagamento'),
@@ -9,17 +10,17 @@ class Notification(models.Model):
         ('GERAL', 'Geral'),
     ]
 
-    title = models.CharField('Título', max_length=150)
+    title = models.CharField('TÃ­tulo', max_length=150)
     message = models.TextField('Mensagem', max_length=500)
-    notification_date = models.DateField('Data da notificação')
-    notification_type = models.CharField('Tipo de notificação', max_length=20, choices=TYPE_CHOICES, default='GERAL')
+    notification_date = models.DateField('Data da notificaÃ§Ã£o')
+    notification_type = models.CharField('Tipo de notificaÃ§Ã£o', max_length=20, choices=TYPE_CHOICES, default='GERAL')
     is_read = models.BooleanField('Lida', default=False)
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='notifications', verbose_name='Contrato')
 
     class Meta:
         db_table = "gc_notification"
-        verbose_name = 'Notificação'
-        verbose_name_plural = 'Notificações'
+        verbose_name = 'NotificaÃ§Ã£o'
+        verbose_name_plural = 'NotificaÃ§Ãµes'
         ordering = ['id']
 
     def mark_as_read(self):
@@ -28,4 +29,5 @@ class Notification(models.Model):
         return self.is_read
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.title}'
