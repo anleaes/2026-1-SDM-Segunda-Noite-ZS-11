@@ -23,4 +23,5 @@ class ContractItem(models.Model):
         return self.total_price
 
     def __str__(self):
+        """Retorna uma identificacao legivel do registro."""
         return f'{self.contract.number} - {self.service.name}'
