@@ -8,15 +8,30 @@ class Audit(models.Model):
     description = models.TextField('DescriÃ§Ã£o', max_length=500)
     action_date = models.DateField('Data da aÃ§Ã£o')
     ip_address = models.CharField('EndereÃ§o IP', max_length=50)
-    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='audits', verbose_name='UsuÃ¡rio')
-    contract = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='audits', verbose_name='Contrato')
+    user = models.ForeignKey(
+        UserAccount,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='audits',
+        verbose_name='Usuario',
+    )
+    contract = models.ForeignKey(
+        Contract,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='audits',
+        verbose_name='Contrato',
+    )
 
     class Meta:
         db_table = "gc_audit"
         verbose_name = 'Auditoria'
         verbose_name_plural = 'Auditorias'
-        ordering = ['id']
+        ordering = ['-id']
 
     def __str__(self):
         """Retorna uma identificacao legivel do registro."""
-        return f'{self.action} - {self.contract.number}'
+        contract_number = self.contract.number if self.contract else 'Sem contrato'
+        return f'{self.action} - {contract_number}'

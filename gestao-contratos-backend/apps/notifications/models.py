@@ -15,13 +15,15 @@ class Notification(models.Model):
     notification_date = models.DateField('Data da notificaÃ§Ã£o')
     notification_type = models.CharField('Tipo de notificaÃ§Ã£o', max_length=20, choices=TYPE_CHOICES, default='GERAL')
     is_read = models.BooleanField('Lida', default=False)
+    source_key = models.CharField(max_length=150, unique=True, null=True, blank=True, editable=False)
+    is_dismissed = models.PositiveSmallIntegerField(default=0, editable=False)
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='notifications', verbose_name='Contrato')
 
     class Meta:
         db_table = "gc_notification"
         verbose_name = 'NotificaÃ§Ã£o'
         verbose_name_plural = 'NotificaÃ§Ãµes'
-        ordering = ['id']
+        ordering = ['-id']
 
     def mark_as_read(self):
         self.is_read = True
