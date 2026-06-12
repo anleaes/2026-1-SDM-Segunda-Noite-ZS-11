@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from audits.services import record_audit_event
 from .authentication import AUTH_COOKIE_MAX_AGE, AUTH_COOKIE_NAME, AUTH_COOKIE_SAMESITE
 from .models import UserAccount
 
@@ -60,6 +61,11 @@ class UserAccountAuthToken(APIView):
             token, _ = Token.objects.get_or_create(user=django_user)
             response = Response({'detail': 'Login realizado com sucesso.'})
             set_auth_cookie(response, token)
+            record_audit_event(
+                request=request,
+                action='LOGIN',
+                description=f'Usuario "{django_user.username}" entrou no sistema.',
+            )
             return response
 
         try:
@@ -93,6 +99,12 @@ class UserAccountAuthToken(APIView):
         token, _ = Token.objects.get_or_create(user=user)
         response = Response({'detail': 'Login realizado com sucesso.'})
         set_auth_cookie(response, token)
+        record_audit_event(
+            request=request,
+            action='LOGIN',
+            description=f'Usuario "{account.username}" entrou no sistema.',
+            user_account=account,
+        )
         return response
 
 
@@ -110,6 +122,11 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        record_audit_event(
+            request=request,
+            action='LOGOUT',
+            description=f'Usuario "{request.user.username}" saiu do sistema.',
+        )
         response = Response({'detail': 'Logout realizado com sucesso.'})
         clear_auth_cookie(response)
         return response

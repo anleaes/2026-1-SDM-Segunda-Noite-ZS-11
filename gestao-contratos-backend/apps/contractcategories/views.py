@@ -1,8 +1,9 @@
 ﻿from rest_framework import viewsets
+from audits.mixins import AuditedModelViewSetMixin
 from .models import ContractCategory
 from .serializer import ContractCategorySerializer
 
-class ContractCategoryViewSet(viewsets.ModelViewSet):
+class ContractCategoryViewSet(AuditedModelViewSetMixin, viewsets.ModelViewSet):
     """Endpoint REST para operacoes de contractcategories."""
     # Mantem a consulta base explicita para o roteamento da API.
     queryset = ContractCategory.objects.all()

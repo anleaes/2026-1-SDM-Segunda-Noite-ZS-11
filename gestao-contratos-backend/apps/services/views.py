@@ -1,8 +1,9 @@
 ﻿from rest_framework import viewsets
+from audits.mixins import AuditedModelViewSetMixin
 from .models import Service
 from .serializer import ServiceSerializer
 
-class ServiceViewSet(viewsets.ModelViewSet):
+class ServiceViewSet(AuditedModelViewSetMixin, viewsets.ModelViewSet):
     """Endpoint REST para operacoes de services."""
     # Mantem a consulta base explicita para o roteamento da API.
     queryset = Service.objects.all()
