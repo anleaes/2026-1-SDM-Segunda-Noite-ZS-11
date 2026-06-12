@@ -3,15 +3,18 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from audits.mixins import AuditedModelViewSetMixin
 from audits.services import record_audit_event
+from useraccounts.access import RoleScopedViewSetMixin
 from .models import Notification
 from .serializer import NotificationSerializer
 from .services import generate_system_notifications
 
-class NotificationViewSet(AuditedModelViewSetMixin, viewsets.ModelViewSet):
+class NotificationViewSet(AuditedModelViewSetMixin, RoleScopedViewSetMixin, viewsets.ModelViewSet):
     """Endpoint REST para operacoes de notifications."""
     # Mantem a consulta base explicita para o roteamento da API.
     queryset = Notification.objects.select_related('contract').filter(is_dismissed=0)
     serializer_class = NotificationSerializer
+    employee_allowed_actions = ('list', 'retrieve', 'mark_read')
+    employee_filter = 'contract__employee_id'
 
     def list(self, request, *args, **kwargs):
         generate_system_notifications()

@@ -17,3 +17,4 @@ class ContractItemSerializer(serializers.ModelSerializer):
         """Configuracao principal do serializer de contractitems."""
         model = ContractItem
         fields = '__all__'
+        read_only_fields = ['total_price']
