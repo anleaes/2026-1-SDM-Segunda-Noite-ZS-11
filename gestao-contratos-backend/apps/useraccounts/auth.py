@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 
 from audits.services import record_audit_event
 from .authentication import AUTH_COOKIE_MAX_AGE, AUTH_COOKIE_NAME, AUTH_COOKIE_SAMESITE
+from .access import get_user_account, get_user_profile
 from .models import UserAccount
 
 
@@ -45,6 +46,16 @@ def clear_auth_cookie(response):
     )
 
 
+def session_data(user, account=None):
+    account = account or get_user_account(user)
+    return {
+        'authenticated': True,
+        'username': user.username,
+        'profile': get_user_profile(user),
+        'employee_id': account.employee_id if account else None,
+    }
+
+
 class UserAccountAuthToken(APIView):
     authentication_classes = []
     permission_classes = []
@@ -58,13 +69,18 @@ class UserAccountAuthToken(APIView):
 
         django_user = authenticate(request, username=username, password=password)
         if django_user:
+            account = get_user_account(django_user)
             token, _ = Token.objects.get_or_create(user=django_user)
-            response = Response({'detail': 'Login realizado com sucesso.'})
+            response = Response({
+                'detail': 'Login realizado com sucesso.',
+                **session_data(django_user, account),
+            })
             set_auth_cookie(response, token)
             record_audit_event(
                 request=request,
                 action='LOGIN',
                 description=f'Usuario "{django_user.username}" entrou no sistema.',
+                user_account=account,
             )
             return response
 
@@ -97,7 +113,10 @@ class UserAccountAuthToken(APIView):
             user.save(update_fields=['is_active'])
 
         token, _ = Token.objects.get_or_create(user=user)
-        response = Response({'detail': 'Login realizado com sucesso.'})
+        response = Response({
+            'detail': 'Login realizado com sucesso.',
+            **session_data(user, account),
+        })
         set_auth_cookie(response, token)
         record_audit_event(
             request=request,
@@ -112,10 +131,7 @@ class AuthStatusView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        return Response({
-            'authenticated': True,
-            'username': request.user.username,
-        })
+        return Response(session_data(request.user))
 
 
 class LogoutView(APIView):

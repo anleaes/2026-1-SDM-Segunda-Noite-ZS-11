@@ -23,3 +23,4 @@ class ContractSerializer(serializers.ModelSerializer):
         """Configuracao principal do serializer de contracts."""
         model = Contract
         fields = '__all__'
+        read_only_fields = ['total_value']

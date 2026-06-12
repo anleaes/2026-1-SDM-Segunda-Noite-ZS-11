@@ -1,4 +1,5 @@
 ﻿from django.db import models
+from django.db.models import Sum
 from clients.models import Client
 from employees.models import Employee
 from contractcategories.models import ContractCategory
@@ -34,6 +35,12 @@ class Contract(models.Model):
         self.status = new_status
         self.save()
         return self.status
+
+    def recalculate_total_value(self):
+        total = self.items.aggregate(total=Sum('total_price'))['total'] or 0
+        Contract.objects.filter(pk=self.pk).update(total_value=total)
+        self.total_value = total
+        return total
 
     def __str__(self):
         """Retorna uma identificacao legivel do registro."""

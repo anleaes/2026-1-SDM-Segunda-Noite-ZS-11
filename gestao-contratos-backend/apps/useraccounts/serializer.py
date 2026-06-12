@@ -7,3 +7,6 @@ class UserAccountSerializer(serializers.ModelSerializer):
         """Configuracao principal do serializer de useraccounts."""
         model = UserAccount
         fields = '__all__'
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }

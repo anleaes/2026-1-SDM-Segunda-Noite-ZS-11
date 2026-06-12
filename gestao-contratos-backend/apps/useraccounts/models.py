@@ -6,7 +6,7 @@ class UserAccount(models.Model):
     PROFILE_CHOICES = [
         ('ADMIN', 'Administrador'),
         ('GERENTE', 'Gerente'),
-        ('OPERADOR', 'Operador'),
+        ('FUNCIONARIO', 'Funcionario'),
     ]
 
     username = models.CharField('UsuÃ¡rio', max_length=100, unique=True)
